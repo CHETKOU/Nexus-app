@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { supabase } from '../../lib/supabase'; // On importe la connexion
+import { supabase } from '../../lib/supabase'; // Vérifie bien que le chemin est correct
 
 export default function ProfilePage() {
   const [username, setUsername] = useState("Nexus");
@@ -10,18 +10,27 @@ export default function ProfilePage() {
   const handleSave = async () => {
     setLoading(true);
     try {
-      // Pour l'instant on simule, car il faudra être connecté pour avoir un ID
-      alert("Connexion à Nexus-BD en cours...");
-      
-      // C'est ici que la magie opérera quand on aura l'Auth :
-      // const { error } = await supabase.from('profiles').upsert({ 
-      //   username, 
-      //   bio,
-      //   updated_at: new Date() 
-      // });
-      
-    } catch (error) {
-      console.error(error);
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        alert("Connecte-toi d'abord via la page /login !");
+        setLoading(false);
+        return;
+      }
+
+      const { error } = await supabase
+        .from('profiles')
+        .upsert({
+          id: user.id,
+          username,
+          bio,
+          updated_at: new Date(),
+        });
+
+      if (error) throw error;
+      alert("Profil Nexus mis à jour !");
+    } catch (error: any) {
+      alert("Erreur : " + error.message);
     } finally {
       setLoading(false);
     }
@@ -31,7 +40,6 @@ export default function ProfilePage() {
     <main className="min-h-screen bg-white text-black flex flex-col items-center p-4">
       <h1 className="font-bold text-xl mb-8">Modifier le profil</h1>
 
-      {/* Photo de Profil */}
       <div className="flex flex-col items-center mb-8">
         <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mb-2">
           <span className="text-2xl">📷</span>
@@ -39,10 +47,9 @@ export default function ProfilePage() {
         <button className="text-sm text-red-500 font-semibold">Modifier la photo</button>
       </div>
 
-      {/* Formulaire */}
       <div className="w-full max-w-md space-y-6">
         <div>
-          <label className="text-gray-500 text-sm">Nom d'utilisateur</label>
+          <label className="block text-gray-500 text-sm">Nom d'utilisateur</label>
           <input 
             type="text" 
             value={username}
@@ -52,7 +59,7 @@ export default function ProfilePage() {
         </div>
 
         <div>
-          <label className="text-gray-500 text-sm">Bio</label>
+          <label className="block text-gray-500 text-sm">Bio</label>
           <textarea 
             value={bio}
             onChange={(e) => setBio(e.target.value)}
