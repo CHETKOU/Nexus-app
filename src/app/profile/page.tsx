@@ -1,29 +1,40 @@
 "use client";
 import React, { useState } from 'react';
+import { supabase } from '../../lib/supabase'; // On importe la connexion
 
 export default function ProfilePage() {
-  const [username, setUsername] = useState("Chetkou Samuel");
+  const [username, setUsername] = useState("Nexus");
   const [bio, setBio] = useState("Passionné d'IT et entrepreneur");
+  const [loading, setLoading] = useState(false);
+
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      // Pour l'instant on simule, car il faudra être connecté pour avoir un ID
+      alert("Connexion à Nexus-BD en cours...");
+      
+      // C'est ici que la magie opérera quand on aura l'Auth :
+      // const { error } = await supabase.from('profiles').upsert({ 
+      //   username, 
+      //   bio,
+      //   updated_at: new Date() 
+      // });
+      
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-white text-black flex flex-col items-center p-4">
-      {/* Header */}
-      <div className="w-full max-w-md flex justify-between items-center mb-8">
-        <h1 className="font-bold text-xl text-center flex-1">Modifier le profil</h1>
-      </div>
+      <h1 className="font-bold text-xl mb-8">Modifier le profil</h1>
 
-      {/* Section Photo de Profil */}
+      {/* Photo de Profil */}
       <div className="flex flex-col items-center mb-8">
-        <div className="w-24 h-24 bg-gray-200 rounded-full overflow-hidden mb-2 relative group">
-          {/* Simulation d'image */}
-          <div className="w-full h-full flex items-center justify-center text-gray-400">
-             📷
-          </div>
-          <input 
-            type="file" 
-            className="absolute inset-0 opacity-0 cursor-pointer" 
-            accept="image/*"
-          />
+        <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mb-2">
+          <span className="text-2xl">📷</span>
         </div>
         <button className="text-sm text-red-500 font-semibold">Modifier la photo</button>
       </div>
@@ -50,8 +61,12 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <button className="mt-12 w-full max-w-md bg-red-500 text-white font-bold py-3 rounded-md">
-        Enregistrer les modifications
+      <button 
+        onClick={handleSave}
+        disabled={loading}
+        className="mt-12 w-full max-w-md bg-red-500 text-white font-bold py-3 rounded-md disabled:opacity-50"
+      >
+        {loading ? "Enregistrement..." : "Enregistrer les modifications"}
       </button>
     </main>
   );
