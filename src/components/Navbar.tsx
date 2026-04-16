@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Users, Plus, MessageSquare, User } from 'lucide-react';
-import CreateMenu from './CreateMenu'; // Assure-toi que le fichier est bien dans le même dossier
+// ON CHANGE L'IMPORT ICI POUR APPELER LE STUDIO CAMERA
+import CreateStudio from './CreateStudio'; 
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -29,7 +30,7 @@ export default function Navbar() {
           <span className="text-[10px] text-gray-500">Amis</span>
         </button>
 
-        {/* --- BOUTON PLUS (+) AVEC LOGIQUE D'OUVERTURE --- */}
+        {/* --- BOUTON PLUS (+) STYLE TIKTOK --- */}
         <div className="flex justify-center w-full">
           <button 
             onClick={() => setIsMenuOpen(true)} 
@@ -59,9 +60,9 @@ export default function Navbar() {
         </Link>
       </nav>
 
-      {/* AFFICHAGE DU MENU NEXUS CREATE AU CLIC */}
+      {/* ICI ON APPELLE LE STUDIO CAMERA AU LIEU DU MENU STATIQUE */}
       {isMenuOpen && (
-        <CreateMenu onClose={() => setIsMenuOpen(false)} />
+        <CreateStudio onClose={() => setIsMenuOpen(false)} />
       )}
     </>
   );
