@@ -1,10 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // On enlève "allowedDevOrigins" qui cause l'erreur
-  // Si tu as besoin d'accéder depuis l'extérieur, 
-  // Next.js 15 le gère souvent nativement en mode dev.
-  
+  /* On enlève la section experimental qui cause l'erreur */
   images: {
     remotePatterns: [
       {
@@ -13,7 +10,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**.supabase.co', // Autorise les images venant de ton Supabase
+        hostname: '**.supabase.co',
       },
     ],
   },
