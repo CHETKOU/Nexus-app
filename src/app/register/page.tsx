@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { supabase } from '../../lib/supabase';
 // On remplace Facebook par FacebookIcon ou on utilise une autre méthode
-import { Chrome, Mail, GraduationCap, Briefcase, Lightbulb, User, ChevronRight } from 'lucide-react';
+import { Globe, Mail, GraduationCap, Briefcase, Lightbulb, User, ChevronRight } from 'lucide-react';
 export default function RegisterPage() {
   // 1. On gère l'état : quel métier l'utilisateur a choisi ?
   const [role, setRole] = useState('');
